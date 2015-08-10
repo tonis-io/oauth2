@@ -33,7 +33,7 @@ class Session
     /**
      * @var Client
      *
-     * @ManyToOne(targetEntity="Client", inversedBy="redirects")
+     * @ManyToOne(targetEntity="Client", inversedBy="sessions")
      * @JoinColumn(nullable=false)
      */
     public $client;
