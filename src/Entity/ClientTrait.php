@@ -1,11 +1,7 @@
 <?php
 namespace Tonis\OAuth2\Entity;
 
-/**
- * @Entity(repositoryClass="Tonis\OAuth2\Repository\Client")
- * @Table(name="oauth_client")
- */
-class Client
+trait ClientTrait
 {
     /**
      * @var string
@@ -32,14 +28,14 @@ class Client
     /**
      * @var ClientRedirect[]
      *
-     * @OneToMany(targetEntity="ClientRedirect", mappedBy="client")
+     * @OneToMany(targetEntity="Tonis\OAuth2\Entity\ClientRedirect", mappedBy="client")
      */
     public $redirects;
 
     /**
      * @var Session[]
      *
-     * @OneToMany(targetEntity="Session", mappedBy="client")
+     * @OneToMany(targetEntity="Tonis\OAuth2\Entity\Session", mappedBy="client")
      */
     public $sessions;
 }
