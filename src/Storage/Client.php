@@ -1,10 +1,10 @@
 <?php
 namespace Tonis\OAuth2\Storage;
 
-use Doctrine\ORM\QueryBuilder;
 use League\OAuth2\Server\Entity\ClientEntity;
 use League\OAuth2\Server\Entity\SessionEntity;
 use League\OAuth2\Server\Storage\ClientInterface;
+use Tonis\OAuth2\Entity;
 use Tonis\OAuth2\Repository;
 
 class Client implements ClientInterface
@@ -27,9 +27,16 @@ class Client implements ClientInterface
      */
     public function get($clientId, $clientSecret = null, $redirectUri = null, $grantType = null)
     {
-        $result = $this->clientRepository->findOne($clientId, $clientSecret, $redirectUri, $grantType);
+        $result = $this->clientRepository->findOne($clientId, $redirectUri);
 
-        return $this->hydrateClient($result);
+        if (null !== $clientSecret &&
+            $result instanceof Entity\Client &&
+            !password_verify($clientSecret, $result->secret)
+        ) {
+            return null;
+        }
+
+        return $this->mapClient($result);
     }
 
     /**
@@ -37,25 +44,24 @@ class Client implements ClientInterface
      */
     public function getBySession(SessionEntity $session)
     {
-        return $this->hydrateClient($this->clientRepository->findOneBySession($session->getId()));
+        return $this->mapClient($this->clientRepository->findOneBySession($session->getId()));
     }
 
     /**
-     * If no results then null is returned. If a result matches then a
-     * League ClientEntity is hydrated and returned.
+     * Maps a Tonis\OAuth2\Client to a League\OAuth2\Server\Entity\ClientEntity.
      *
-     * @param array $result
+     * @param Entity\Client $client
      * @return ClientEntity|null
      */
-    private function hydrateClient(array $result)
+    private function mapClient(Entity\Client $client = null)
     {
-        if (empty($result)) {
+        if (null === $client) {
             return null;
         }
 
-        $client = new ClientEntity($this->server);
-        $client->hydrate(array_shift($result));
+        $leagueClient = new ClientEntity($this->server);
+        $leagueClient->hydrate(['id' => $client->id, 'name' => $client->name]);
 
-        return $client;
+        return $leagueClient;
     }
 }

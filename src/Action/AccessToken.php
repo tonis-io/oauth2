@@ -31,6 +31,8 @@ class AccessToken
             $result = ['error' => $ex->getMessage()];
         }
 
-        return $response->json($result);
+        return $response
+            ->withStatus(400)
+            ->json($result);
     }
 }

@@ -2,30 +2,23 @@
 namespace Tonis\OAuth2\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Tonis\OAuth2\Entity;
 
 class Client extends EntityRepository
 {
     /**
      * @param string      $clientId
-     * @param string|null $clientSecret
      * @param string|null $redirectUri
-     * @param string|null $grantType
-     * @return array
+     * @return Entity\Client
      */
-    public function findOne($clientId, $clientSecret = null, $redirectUri = null, $grantType = null)
+    public function findOne($clientId, $redirectUri = null)
     {
         $qb = $this->createQueryBuilder('client');
         $qb
-            ->select('partial client.{id, name}')
+            ->select('partial client.{id, name, secret}')
             ->where('client.id = :clientId')
             ->setParameter('clientId', $clientId)
             ->setMaxResults(1);
-
-        if (null !== $clientSecret) {
-            $qb
-                ->andWhere('client.secret = :clientSecret')
-                ->setParameter('clientSecret', $clientSecret);
-        }
 
         if (null !== $redirectUri) {
             $qb
@@ -34,12 +27,12 @@ class Client extends EntityRepository
                 ->setParameter('redirectUri', $redirectUri);
         }
 
-        return $qb->getQuery()->getArrayResult();
+        return $qb->getQuery()->getSingleResult();
     }
 
     /**
      * @param int $sessionId
-     * @return array
+     * @return Entity\Client
      */
     public function findOneBySession($sessionId)
     {
@@ -51,6 +44,6 @@ class Client extends EntityRepository
             ->setParameter('sessionId', $sessionId)
             ->setMaxResults(1);
 
-        return $qb->getQuery()->getArrayResult();
+        return $qb->getQuery()->getSingleResult();
     }
 }

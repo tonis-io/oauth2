@@ -35,7 +35,7 @@ class AccessToken extends EntityRepository
         $qb = $this->createQueryBuilder('token');
         $qb
             ->select('token, scopes')
-            ->join('token.scopes', 'scopes')
+            ->leftJoin('token.scopes', 'scopes')
             ->where('token.token = :token')
             ->setParameter('token', $token)
             ->setMaxResults(1);

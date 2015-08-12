@@ -17,9 +17,9 @@ class ClientRedirect
     public $id;
 
     /**
-     * @var ClientInterface
+     * @var Client
      *
-     * @ManyToOne(targetEntity="ClientInterface", inversedBy="redirects")
+     * @ManyToOne(targetEntity="Client", inversedBy="redirects")
      * @JoinColumn(nullable=false)
      */
     public $client;

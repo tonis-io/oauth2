@@ -31,9 +31,9 @@ class Session
     public $ownerId;
 
     /**
-     * @var ClientInterface
+     * @var Client
      *
-     * @ManyToOne(targetEntity="ClientInterface", inversedBy="sessions")
+     * @ManyToOne(targetEntity="Client", inversedBy="sessions")
      * @JoinColumn(nullable=false)
      */
     public $client;
