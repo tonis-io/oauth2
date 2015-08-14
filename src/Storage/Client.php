@@ -27,16 +27,16 @@ class Client implements ClientInterface
      */
     public function get($clientId, $clientSecret = null, $redirectUri = null, $grantType = null)
     {
-        $result = $this->clientRepository->findOne($clientId, $redirectUri);
+        $client = $this->clientRepository->findOne($clientId, $redirectUri);
 
         if (null !== $clientSecret &&
-            $result instanceof Entity\Client &&
-            !password_verify($clientSecret, $result->secret)
+            $client instanceof Entity\Client &&
+            !password_verify($clientSecret, $client->getSecret())
         ) {
             return null;
         }
 
-        return $this->mapClient($result);
+        return $this->mapClient($client);
     }
 
     /**
@@ -60,7 +60,7 @@ class Client implements ClientInterface
         }
 
         $leagueClient = new ClientEntity($this->server);
-        $leagueClient->hydrate(['id' => $client->id, 'name' => $client->name]);
+        $leagueClient->hydrate(['id' => $client->getId(), 'name' => $client->getName()]);
 
         return $leagueClient;
     }

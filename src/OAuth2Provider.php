@@ -27,12 +27,18 @@ class OAuth2Provider extends ServiceProvider
 
         $container->singleton(Storage\Session::class, function () {
             $em = $this->getContainer()->get(EntityManager::class);
-            return new Storage\Session($em->getRepository(Entity\Session::class));
+            return new Storage\Session(
+                $em->getRepository(Entity\Session::class),
+                $em->getRepository(Entity\Scope::class)
+            );
         });
 
         $container->singleton(Storage\AccessToken::class, function () {
             $em = $this->getContainer()->get(EntityManager::class);
-            return new Storage\AccessToken($em->getRepository(Entity\AccessToken::class));
+            return new Storage\AccessToken(
+                $em->getRepository(Entity\AccessToken::class),
+                $em->getRepository(Entity\Scope::class)
+            );
         });
 
         $container->singleton(Storage\Client::class, function () {

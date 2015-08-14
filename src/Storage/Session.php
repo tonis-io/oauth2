@@ -14,14 +14,18 @@ class Session implements SessionInterface
     use StorageTrait;
 
     /** @var Repository\Session */
-    private $repository;
+    private $sessionRepository;
 
     /**
-     * @param Repository\Session $repository
+     * @param Repository\Session $sessionRepository
+     * @param Repository\Scope $scopeRepository
      */
-    public function __construct(Repository\Session $repository)
-    {
-        $this->repository = $repository;
+    public function __construct(
+        Repository\Session $sessionRepository,
+        Repository\Scope $scopeRepository
+    ) {
+        $this->sessionRepository = $sessionRepository;
+        $this->scopeRepository   = $scopeRepository;
     }
 
     /**
@@ -29,39 +33,53 @@ class Session implements SessionInterface
      */
     public function getByAccessToken(AccessTokenEntity $accessToken)
     {
-        $result = $this
-            ->repository
+        $session = $this
+            ->sessionRepository
             ->findOneByAccessToken($accessToken->getId());
 
-        $session = new SessionEntity($this->server);
-        $session->setId($result->id);
-        $session->setOwner($result->ownerType, $result->ownerId);
+        $leagueSession = new SessionEntity($this->server);
+        $leagueSession->setId($session->getId());
+        $leagueSession->setOwner($session->getOwnerType(), $session->getOwnerId());
 
-        return $session;
+        return $leagueSession;
     }
 
     /**
-     * Get a session from an auth code
-     *
-     * @param \League\OAuth2\Server\Entity\AuthCodeEntity $authCode The auth code
-     *
-     * @return \League\OAuth2\Server\Entity\SessionEntity | null
+     * {@inheritDoc}
      */
     public function getByAuthCode(AuthCodeEntity $authCode)
     {
-        // TODO: Implement getByAuthCode() method.
+        $session = $this
+            ->sessionRepository
+            ->findOneByAuthCode($authCode->getId());
+
+        $leagueSession = new SessionEntity($this->server);
+        $leagueSession->setId($session->getId());
+        $leagueSession->setOwner($session->getOwnerType(), $session->getOwnerId());
+
+        return $leagueSession;
     }
 
     /**
-     * Get a session's scopes
-     *
-     * @param  \League\OAuth2\Server\Entity\SessionEntity
-     *
-     * @return \League\OAuth2\Server\Entity\ScopeEntity[] Array of \League\OAuth2\Server\Entity\ScopeEntity
+     * {@inheritDoc}
      */
-    public function getScopes(SessionEntity $session)
+    public function getScopes(SessionEntity $leagueSession)
     {
-        // TODO: Implement getScopes() method.
+        /** @var Entity\Session $session */
+        $session = $this->sessionRepository->find($leagueSession->getId());
+        $scopes  = [];
+
+        foreach ($session->getScopes() as $scope) {
+            $leagueScope = new ScopeEntity($this->server);
+            $leagueScope->hydrate([
+                'id'          => $scope->getId(),
+                'description' => $scope->getDescription(),
+            ]);
+
+            $scopes[] = $leagueScope;
+        }
+
+        return $scopes;
     }
 
     /**
@@ -70,21 +88,21 @@ class Session implements SessionInterface
     public function create($ownerType, $ownerId, $clientId, $clientRedirectUri = null)
     {
         return $this
-            ->repository
+            ->sessionRepository
             ->create($ownerType, $ownerId, $clientId, $clientRedirectUri)
-            ->id;
+            ->getId();
     }
 
     /**
-     * Associate a scope with a session
-     *
-     * @param \League\OAuth2\Server\Entity\SessionEntity $session The session
-     * @param \League\OAuth2\Server\Entity\ScopeEntity   $scope   The scope
-     *
-     * @return void
+     * {@inheritDoc}
      */
-    public function associateScope(SessionEntity $session, ScopeEntity $scope)
+    public function associateScope(SessionEntity $leagueSession, ScopeEntity $leagueScope)
     {
-        // TODO: Implement associateScope() method.
+        /** @var Entity\AccessToken $token */
+        $token = $this->sessionRepository->find($leagueSession->getId());
+        /** @var Entity\Scope $scope */
+        $scope = $this->scopeRepository->find($leagueScope->getId());
+
+        $token->addScope($scope);
     }
 }

@@ -7,19 +7,24 @@ use League\OAuth2\Server\Storage\AccessTokenInterface;
 use Tonis\OAuth2\Entity;
 use Tonis\OAuth2\Repository;
 
-class AccessToken implements AccessTokenInterface
+final class AccessToken implements AccessTokenInterface
 {
     use StorageTrait;
 
+    /** @var Repository\Scope */
+    private $scopeRepository;
     /** @var Repository\AccessToken */
-    private $repository;
+    private $tokenRepository;
 
     /**
-     * @param Repository\AccessToken $repository
+     * @param Repository\AccessToken $tokenRepository
+     * @param Repository\Scope $scopeRepository
      */
-    public function __construct(Repository\AccessToken $repository)
-    {
-        $this->repository = $repository;
+    public function __construct(
+        Repository\AccessToken $tokenRepository,
+        Repository\Scope $scopeRepository
+    ) {
+        $this->tokenRepository = $tokenRepository;
     }
 
     /**
@@ -27,15 +32,15 @@ class AccessToken implements AccessTokenInterface
      */
     public function get($token)
     {
-        $result = $this->repository->find($token);
+        $result = $this->tokenRepository->find($token);
 
         if (!$result instanceof Entity\AccessToken) {
             return null;
         }
 
         $token = new AccessTokenEntity($this->server);
-        $token->setId($result->token);
-        $token->setExpireTime($result->expireTime);
+        $token->setId($result->getToken());
+        $token->setExpireTime($result->getExpireTime());
 
         return $token;
     }
@@ -45,13 +50,13 @@ class AccessToken implements AccessTokenInterface
      */
     public function getScopes(AccessTokenEntity $token)
     {
-        $accessToken = $this->repository->findOneByTokenWithScopes($token);
-        $scopes      = $accessToken->scopes;
+        $accessToken = $this->tokenRepository->findOneByTokenWithScopes($token);
+        $scopes      = $accessToken->getScopes();
 
         $result = [];
         foreach ($scopes as $scope) {
             $leagueScope = new ScopeEntity($this->server);
-            $leagueScope->hydrate(['id' => $scope->id, 'description' => $scope->description]);
+            $leagueScope->hydrate(['id' => $scope->getId(), 'description' => $scope->getDescription()]);
 
             $result[] = $leagueScope;
         }
@@ -64,31 +69,27 @@ class AccessToken implements AccessTokenInterface
      */
     public function create($token, $expireTime, $sessionId)
     {
-        $this->repository->create($token, $expireTime, $sessionId);
+        $this->tokenRepository->create($token, $expireTime, $sessionId);
     }
 
     /**
-     * Associate a scope with an acess token
-     *
-     * @param \League\OAuth2\Server\Entity\AccessTokenEntity $token The access token
-     * @param \League\OAuth2\Server\Entity\ScopeEntity       $scope The scope
-     *
-     * @return void
+     * {@inheritDoc}
      */
-    public function associateScope(AccessTokenEntity $token, ScopeEntity $scope)
+    public function associateScope(AccessTokenEntity $leagueToken, ScopeEntity $leagueScope)
     {
-        // TODO: Implement associateScope() method.
+        /** @var Entity\AccessToken $token */
+        $token = $this->tokenRepository->find($leagueToken->getId());
+        /** @var Entity\Scope $scope */
+        $scope = $this->scopeRepository->find($leagueScope->getId());
+
+        $token->addScope($scope);
     }
 
     /**
-     * Delete an access token
-     *
-     * @param \League\OAuth2\Server\Entity\AccessTokenEntity $token The access token to delete
-     *
-     * @return void
+     * {@inheritDoc}
      */
     public function delete(AccessTokenEntity $token)
     {
-        // TODO: Implement delete() method.
+        $this->tokenRepository->remove($token);
     }
 }

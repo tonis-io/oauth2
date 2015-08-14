@@ -1,19 +1,23 @@
 <?php
 namespace Tonis\OAuth2\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+
 /**
  * @Entity(repositoryClass="Tonis\OAuth2\Repository\AccessToken")
  * @Table(name="oauth_access_token")
  */
 class AccessToken
 {
+    use ScopeTrait;
+
     /**
      * @var string
      *
      * @Id
      * @Column(type="string")
      */
-    public $token;
+    private $token;
 
     /**
      * @var Session
@@ -21,21 +25,21 @@ class AccessToken
      * @ManyToOne(targetEntity="Session", inversedBy="accessTokens")
      * @JoinColumn(nullable=false)
      */
-    public $session;
+    private $session;
 
     /**
      * @var int
      *
      * @Column(type="integer", name="expire_time")
      */
-    public $expireTime;
+    private $expireTime;
 
     /**
      * @var RefreshToken[]
      *
      * @OneToMany(targetEntity="RefreshToken", mappedBy="accessToken")
      */
-    public $refreshTokens;
+    private $refreshTokens;
 
     /**
      * @var Scope[]
@@ -46,5 +50,67 @@ class AccessToken
      *   inverseJoinColumns={@JoinColumn(name="scope_id", referencedColumnName="id")}
      * )
      */
-    public $scopes;
+    private $scopes;
+
+    public function __construct()
+    {
+        $this->refreshTokens = new ArrayCollection();
+        $this->scopes        = new ArrayCollection();
+    }
+
+    /**
+     * @return string
+     */
+    public function getToken()
+    {
+        return $this->token;
+    }
+
+    /**
+     * @param string $token
+     */
+    public function setToken($token)
+    {
+        $this->token = $token;
+    }
+
+    /**
+     * @return Session
+     */
+    public function getSession()
+    {
+        return $this->session;
+    }
+
+    /**
+     * @param Session $session
+     */
+    public function setSession(Session $session)
+    {
+        $this->session = $session;
+    }
+
+    /**
+     * @return int
+     */
+    public function getExpireTime()
+    {
+        return $this->expireTime;
+    }
+
+    /**
+     * @param int $expireTime
+     */
+    public function setExpireTime($expireTime)
+    {
+        $this->expireTime = $expireTime;
+    }
+
+    /**
+     * @return RefreshToken[]
+     */
+    public function getRefreshTokens()
+    {
+        return $this->refreshTokens;
+    }
 }

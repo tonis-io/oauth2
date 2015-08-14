@@ -7,35 +7,37 @@ namespace Tonis\OAuth2\Entity;
  */
 class AuthCode
 {
+    use ScopeTrait;
+
     /**
      * @var string
      *
      * @Id
      * @Column(type="string")
      */
-    public $code;
+    private $code;
 
     /**
      * @var Session
      *
-     * @ManyToOne(targetEntity="Session", inversedBy="accessTokens")
+     * @ManyToOne(targetEntity="Session", inversedBy="authCodes")
      * @JoinColumn(nullable=false)
      */
-    public $session;
+    private $session;
 
     /**
      * @var int
      *
      * @Column(type="integer", name="expire_time")
      */
-    public $expireTime;
+    private $expireTime;
 
     /**
      * @var string
      *
      * @Column(type="string", name="client_redirect_uri", nullable=true)
      */
-    public $clientRedirectUri;
+    private $clientRedirectUri;
 
     /**
      * @var Scope[]
@@ -46,5 +48,69 @@ class AuthCode
      *   inverseJoinColumns={@JoinColumn(name="scope_id", referencedColumnName="id")}
      * )
      */
-    public $scopes;
+    private $scopes;
+
+    /**
+     * @return string
+     */
+    public function getCode()
+    {
+        return $this->code;
+    }
+
+    /**
+     * @param string $code
+     */
+    public function setCode($code)
+    {
+        $this->code = $code;
+    }
+
+    /**
+     * @return Session
+     */
+    public function getSession()
+    {
+        return $this->session;
+    }
+
+    /**
+     * @param Session $session
+     */
+    public function setSession(Session $session)
+    {
+        $this->session = $session;
+    }
+
+    /**
+     * @return int
+     */
+    public function getExpireTime()
+    {
+        return $this->expireTime;
+    }
+
+    /**
+     * @param int $expireTime
+     */
+    public function setExpireTime($expireTime)
+    {
+        $this->expireTime = $expireTime;
+    }
+
+    /**
+     * @return string
+     */
+    public function getClientRedirectUri()
+    {
+        return $this->clientRedirectUri;
+    }
+
+    /**
+     * @param string $clientRedirectUri
+     */
+    public function setClientRedirectUri($clientRedirectUri)
+    {
+        $this->clientRedirectUri = $clientRedirectUri;
+    }
 }

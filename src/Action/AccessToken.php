@@ -5,7 +5,7 @@ use League\OAuth2\Server\AuthorizationServer;
 use Tonis\Http\Request;
 use Tonis\Http\Response;
 
-class AccessToken
+final class AccessToken
 {
     /** @var AuthorizationServer */
     private $server;
@@ -28,7 +28,10 @@ class AccessToken
         try {
             $result = $this->server->issueAccessToken();
         } catch (\Exception $ex) {
-            $result = ['error' => $ex->getMessage()];
+            $result = [
+                'error' => $ex->getMessage(),
+                'trace' => $ex->getTrace()
+            ];
         }
 
         return $response

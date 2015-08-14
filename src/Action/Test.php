@@ -6,7 +6,7 @@ use League\OAuth2\Server\ResourceServer;
 use Tonis\Http\Request;
 use Tonis\Http\Response;
 
-class Test
+final class Test
 {
     /** @var ResourceServer */
     private $server;
