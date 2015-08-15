@@ -2131,12 +2131,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tonis-io/tonis.git",
-                "reference": "130b5f71470e048e7ed8b0c519fd4a2439dd8692"
+                "reference": "aff8c1ac444f598b28dde5ef63fb9817955231f2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tonis-io/tonis/zipball/130b5f71470e048e7ed8b0c519fd4a2439dd8692",
-                "reference": "130b5f71470e048e7ed8b0c519fd4a2439dd8692",
+                "url": "https://api.github.com/repos/tonis-io/tonis/zipball/aff8c1ac444f598b28dde5ef63fb9817955231f2",
+                "reference": "aff8c1ac444f598b28dde5ef63fb9817955231f2",
                 "shasum": ""
             },
             "require": {
@@ -2186,7 +2186,7 @@
                 }
             ],
             "description": "Tonis is a middleware framework built on top of Stratigility.",
-            "time": "2015-08-14 21:34:16"
+            "time": "2015-08-15 01:43:55"
         },
         {
             "name": "zendframework/zend-diactoros",

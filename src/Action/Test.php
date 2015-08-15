@@ -5,8 +5,9 @@ use League\OAuth2\Server\Exception\AccessDeniedException;
 use League\OAuth2\Server\ResourceServer;
 use Tonis\Http\Request;
 use Tonis\Http\Response;
+use Tonis\Middleware;
 
-final class Test
+final class Test implements Middleware\RouterInterface
 {
     /** @var ResourceServer */
     private $server;

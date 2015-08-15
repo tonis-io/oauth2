@@ -4,8 +4,9 @@ namespace Tonis\OAuth2\Action;
 use League\OAuth2\Server\AuthorizationServer;
 use Tonis\Http\Request;
 use Tonis\Http\Response;
+use Tonis\Middleware;
 
-final class AccessToken
+final class AccessToken implements Middleware\RouterInterface
 {
     /** @var AuthorizationServer */
     private $server;
