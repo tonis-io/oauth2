@@ -7,7 +7,7 @@ use League\OAuth2\Server\AuthorizationServer;
 use League\OAuth2\Server\Grant\ClientCredentialsGrant;
 use League\OAuth2\Server\ResourceServer;
 
-class OAuth2Provider extends ServiceProvider
+final class OAuth2Provider extends ServiceProvider
 {
     protected $provides = [
         AuthorizationServer::class,
@@ -25,7 +25,7 @@ class OAuth2Provider extends ServiceProvider
     {
         $container = $this->getContainer();
 
-        $container->singleton(Storage\Session::class, function () {
+        $container->add(Storage\Session::class, function () {
             $em = $this->getContainer()->get(EntityManager::class);
             return new Storage\Session(
                 $em->getRepository(Entity\Session::class),
@@ -33,7 +33,7 @@ class OAuth2Provider extends ServiceProvider
             );
         });
 
-        $container->singleton(Storage\AccessToken::class, function () {
+        $container->add(Storage\AccessToken::class, function () {
             $em = $this->getContainer()->get(EntityManager::class);
             return new Storage\AccessToken(
                 $em->getRepository(Entity\AccessToken::class),
@@ -41,17 +41,17 @@ class OAuth2Provider extends ServiceProvider
             );
         });
 
-        $container->singleton(Storage\Client::class, function () {
+        $container->add(Storage\Client::class, function () {
             $em = $this->getContainer()->get(EntityManager::class);
             return new Storage\Client($em->getRepository(Entity\Client::class));
         });
 
-        $container->singleton(Storage\Scope::class, function () {
+        $container->add(Storage\Scope::class, function () {
             $em = $this->getContainer()->get(EntityManager::class);
             return new Storage\Scope($em->getRepository(Entity\Scope::class));
         });
 
-        $container->singleton(AuthorizationServer::class, function () {
+        $container->add(AuthorizationServer::class, function () {
             $container = $this->getContainer();
             $server    = new AuthorizationServer;
 
@@ -66,7 +66,7 @@ class OAuth2Provider extends ServiceProvider
             return $server;
         });
 
-        $container->singleton(ResourceServer::class, function () {
+        $container->add(ResourceServer::class, function () {
             $container = $this->getContainer();
 
             return new ResourceServer(

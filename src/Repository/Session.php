@@ -4,7 +4,7 @@ namespace Tonis\OAuth2\Repository;
 use Doctrine\ORM\EntityRepository;
 use Tonis\OAuth2\Entity;
 
-class Session extends EntityRepository
+final class Session extends EntityRepository
 {
     /**
      * @param string $ownerType

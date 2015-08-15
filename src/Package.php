@@ -1,14 +1,13 @@
 <?php
 namespace Tonis\OAuth2;
 
-use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain;
 use Doctrine\ORM\EntityManager;
 use Tonis\App;
 use Tonis\DoctrineORM\Exception\InvalidDriver;
 use Tonis\PackageInterface;
 use Tonis\Router\Group;
 
-class Package implements PackageInterface
+final class Package implements PackageInterface
 {
     /**
      * @param App $app
@@ -31,13 +30,15 @@ class Package implements PackageInterface
         $app->add($router);
     }
 
+    /**
+     * Adds an annotation driver to the default Doctrine driver chain.
+     *
+     * @param EntityManager $em
+     */
     private function registerDriver(EntityManager $em)
     {
+        /** @var \Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain $driver */
         $driver = $em->getConfiguration()->getMetadataDriverImpl();
-
-        if (!$driver instanceof MappingDriverChain) {
-            throw new InvalidDriver('Expected driver chain; setup DoctrineORM package manually');
-        }
 
         $oauth2driver = $em->getConfiguration()->newDefaultAnnotationDriver(__DIR__ . '/Entity');
         $driver->addDriver($oauth2driver, __NAMESPACE__);

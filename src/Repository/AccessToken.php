@@ -6,7 +6,7 @@ use League\OAuth2\Server\Entity\AccessTokenEntity;
 use League\OAuth2\Server\Entity\ScopeEntity;
 use Tonis\OAuth2\Entity;
 
-class AccessToken extends EntityRepository
+final class AccessToken extends EntityRepository
 {
     /**
      * @param string $token

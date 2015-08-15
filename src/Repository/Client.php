@@ -4,7 +4,7 @@ namespace Tonis\OAuth2\Repository;
 use Doctrine\ORM\EntityRepository;
 use Tonis\OAuth2\Entity;
 
-class Client extends EntityRepository
+final class Client extends EntityRepository
 {
     /**
      * @param string      $clientId
