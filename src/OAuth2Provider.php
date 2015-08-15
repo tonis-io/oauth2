@@ -66,7 +66,7 @@ final class OAuth2Provider extends ServiceProvider
             return $server;
         });
 
-        $container->add(ResourceServer::class, function () {
+        $container->singleton(ResourceServer::class, function () {
             $container = $this->getContainer();
 
             return new ResourceServer(
