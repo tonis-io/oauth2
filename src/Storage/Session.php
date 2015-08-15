@@ -65,6 +65,10 @@ class Session implements SessionInterface
      */
     public function getScopes(SessionEntity $leagueSession)
     {
+        if (null === $leagueSession->getId()) {
+            return [];
+        }
+
         /** @var Entity\Session $session */
         $session = $this->sessionRepository->find($leagueSession->getId());
         $scopes  = [];
