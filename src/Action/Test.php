@@ -30,7 +30,14 @@ final class Test implements Middleware\RouterInterface
         try {
             $this->server->isValidRequest(false);
         } catch (AccessDeniedException $ex) {
-            return $response->json(['error' => $ex->getMessage()]);
+            return $response
+                ->withStatus(403)
+                ->json([
+                    'errors' => [
+                        'title'   => $ex->getMessage(),
+                        'details' => $ex->getTrace(),
+                    ]
+                ]);
         }
 
         $token   = $this->server->getAccessToken();

@@ -29,14 +29,16 @@ final class AccessToken implements Middleware\RouterInterface
         try {
             $result = $this->server->issueAccessToken();
         } catch (\Exception $ex) {
+            $response = $response->withStatus(400);
+
             $result = [
-                'error' => $ex->getMessage(),
-                'trace' => $ex->getTrace()
+                'errors' => [
+                    'title'   => $ex->getMessage(),
+                    'details' => $ex->getTrace(),
+                ],
             ];
         }
 
-        return $response
-            ->withStatus(400)
-            ->json($result);
+        return $response->json($result);
     }
 }
