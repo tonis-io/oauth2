@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "56321b90237cb3ca45134bbc513a4368",
+    "hash": "a7b69f2f6ab5abcff42ad26ce5e46930",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -1061,6 +1061,58 @@
                 "views"
             ],
             "time": "2015-07-09 02:14:40"
+        },
+        {
+            "name": "michaelmoussa/doctrine-qbmocker",
+            "version": "0.9.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/michaelmoussa/doctrine-qbmocker.git",
+                "reference": "368446c45c6f03479488bd4229b9ea6e72aeccd8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/michaelmoussa/doctrine-qbmocker/zipball/368446c45c6f03479488bd4229b9ea6e72aeccd8",
+                "reference": "368446c45c6f03479488bd4229b9ea6e72aeccd8",
+                "shasum": ""
+            },
+            "require": {
+                "phpunit/phpunit": ">=3.7 | ~4.2"
+            },
+            "require-dev": {
+                "doctrine/mongodb-odm": "dev-master",
+                "doctrine/orm": "2.*",
+                "jmikola/geojson": "~1.0",
+                "satooshi/php-coveralls": "dev-master",
+                "squizlabs/php_codesniffer": "1.*"
+            },
+            "suggest": {
+                "doctrine/mongodb-odm": "Allows for simplified mocking of Doctrine ODM MongoDB query builders.",
+                "doctrine/orm": "Allows for simplified mocking of Doctrine ORM query builders.",
+                "jmikola/geojson": "Required for doctrine/mongodb-odm."
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "MMoussa\\Doctrine\\": [
+                        "src/",
+                        "test/"
+                    ]
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Michael Moussa",
+                    "email": "michael.moussa@gmail.com"
+                }
+            ],
+            "description": "A helper library for mocking Doctrine query builders",
+            "homepage": "http://github.com/michaelmoussa/doctrine-qbmocker",
+            "time": "2015-05-05 04:01:37"
         },
         {
             "name": "mockery/mockery",

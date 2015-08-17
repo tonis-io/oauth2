@@ -18,9 +18,9 @@ final class AccessToken extends EntityRepository
     public function create($token, $expireTime, $sessionId)
     {
         $accessToken = new Entity\AccessToken();
-        $accessToken->setToken($token);
-        $accessToken->setExpireTime($expireTime);
-        $accessToken->setSession($this->_em->getReference(Entity\Session::class, $sessionId));
+        $accessToken->token = $token;
+        $accessToken->expireTime = $expireTime;
+        $accessToken->session = $this->_em->getReference(Entity\Session::class, $sessionId);
 
         $this->_em->persist($accessToken);
         $this->_em->flush($accessToken);
@@ -38,19 +38,10 @@ final class AccessToken extends EntityRepository
     }
 
     /**
-     * @param AccessTokenEntity $token
-     * @param ScopeEntity $scope
-     */
-    public function associateScope(AccessTokenEntity $token, ScopeEntity $scope)
-    {
-
-    }
-
-    /**
      * @param string $token
      * @return Entity\AccessToken
      */
-    public function findOneByTokenWithScopes($token)
+    public function findOneWithScopesByToken($token)
     {
         $qb = $this->createQueryBuilder('token');
         $qb

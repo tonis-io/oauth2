@@ -15,7 +15,7 @@ class AuthCode
      * @Id
      * @Column(type="string")
      */
-    private $code;
+    public $code;
 
     /**
      * @var Session
@@ -23,21 +23,21 @@ class AuthCode
      * @ManyToOne(targetEntity="Session", inversedBy="authCodes")
      * @JoinColumn(nullable=false)
      */
-    private $session;
+    public $session;
 
     /**
      * @var int
      *
      * @Column(type="integer", name="expire_time")
      */
-    private $expireTime;
+    public $expireTime;
 
     /**
      * @var string
      *
      * @Column(type="string", name="client_redirect_uri", nullable=true)
      */
-    private $clientRedirectUri;
+    public $clientRedirectUri;
 
     /**
      * @var Scope[]
@@ -48,69 +48,5 @@ class AuthCode
      *   inverseJoinColumns={@JoinColumn(name="scope_id", referencedColumnName="id")}
      * )
      */
-    private $scopes;
-
-    /**
-     * @return string
-     */
-    public function getCode()
-    {
-        return $this->code;
-    }
-
-    /**
-     * @param string $code
-     */
-    public function setCode($code)
-    {
-        $this->code = $code;
-    }
-
-    /**
-     * @return Session
-     */
-    public function getSession()
-    {
-        return $this->session;
-    }
-
-    /**
-     * @param Session $session
-     */
-    public function setSession(Session $session)
-    {
-        $this->session = $session;
-    }
-
-    /**
-     * @return int
-     */
-    public function getExpireTime()
-    {
-        return $this->expireTime;
-    }
-
-    /**
-     * @param int $expireTime
-     */
-    public function setExpireTime($expireTime)
-    {
-        $this->expireTime = $expireTime;
-    }
-
-    /**
-     * @return string
-     */
-    public function getClientRedirectUri()
-    {
-        return $this->clientRedirectUri;
-    }
-
-    /**
-     * @param string $clientRedirectUri
-     */
-    public function setClientRedirectUri($clientRedirectUri)
-    {
-        $this->clientRedirectUri = $clientRedirectUri;
-    }
+    public $scopes;
 }

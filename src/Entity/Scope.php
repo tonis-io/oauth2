@@ -13,44 +13,12 @@ class Scope
      * @Id
      * @Column(type="string")
      */
-    private $id;
+    public $id;
 
     /**
      * @var string
      *
      * @Column(type="string")
      */
-    private $description;
-
-    /**
-     * @return string
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param string $id
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-    }
-
-    /**
-     * @return string
-     */
-    public function getDescription()
-    {
-        return $this->description;
-    }
-
-    /**
-     * @param string $description
-     */
-    public function setDescription($description)
-    {
-        $this->description = $description;
-    }
+    public $description;
 }

@@ -1,7 +1,6 @@
 <?php
 namespace Tonis\OAuth2\Action;
 
-use League\OAuth2\Server\Exception\AccessDeniedException;
 use League\OAuth2\Server\ResourceServer;
 use Tonis\Http\Request;
 use Tonis\Http\Response;
@@ -29,7 +28,7 @@ final class Test implements Middleware\RouterInterface
     {
         try {
             $this->server->isValidRequest(false);
-        } catch (AccessDeniedException $ex) {
+        } catch (\Exception $ex) {
             return $response
                 ->withStatus(403)
                 ->json([

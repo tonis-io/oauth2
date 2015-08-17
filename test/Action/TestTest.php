@@ -26,25 +26,24 @@ class TestTest extends \PHPUnit_Framework_TestCase
     {
         $this->server = new ResourceServer();
         $this->action = new Test($this->server);
-
-        $this->server->getRequest()->headers->add(['Authorization' => 'Bearer foo']);
     }
 
     public function testHandlesException()
     {
-        $ex      = new AccessDeniedException();
-        $action  = $this->action;
+        $action = $this->action;
 
         /** @var Response $response */
         $response = $action($this->newTonisRequest('/'), $this->newTonisResponse());
 
         $this->assertSame(403, $response->getStatusCode());
-        $this->assertContains($ex->getMessage(), $response->getBody()->__toString());
+        $this->assertContains('access token', $response->getBody()->__toString());
     }
 
     public function testInvoke()
     {
-        $action   = $this->action;
+        $this->server->getRequest()->headers->add(['Authorization' => 'Bearer foo']);
+
+        $action = $this->action;
         /** @var Response $response */
         $response = $action($this->newTonisRequest('/'), $this->newTonisResponse());
 

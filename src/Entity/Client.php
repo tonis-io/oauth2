@@ -13,81 +13,33 @@ class Client
      * @Id
      * @Column(type="string")
      */
-    private $id;
+    public $id;
 
     /**
      * @var string
      *
      * @Column(type="string")
      */
-    private $name;
+    public $name;
 
     /**
      * @var string
      *
      * @Column(type="string")
      */
-    private $secret;
+    public $secret;
 
     /**
      * @var ClientRedirect[]
      *
      * @OneToMany(targetEntity="Tonis\OAuth2\Entity\ClientRedirect", mappedBy="client")
      */
-    private $redirects;
+    public $redirects;
 
     /**
      * @var Session[]
      *
      * @OneToMany(targetEntity="Tonis\OAuth2\Entity\Session", mappedBy="client")
      */
-    private $sessions;
-
-    /**
-     * @return string
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param string $id
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * @param string $name
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-    }
-
-    /**
-     * @return string
-     */
-    public function getSecret()
-    {
-        return $this->secret;
-    }
-
-    /**
-     * @param string $secret
-     */
-    public function setSecret($secret)
-    {
-        $this->secret = $secret;
-    }
+    public $sessions;
 }
