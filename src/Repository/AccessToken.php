@@ -20,7 +20,7 @@ final class AccessToken extends EntityRepository
         $accessToken = new Entity\AccessToken();
         $accessToken->token = $token;
         $accessToken->expireTime = $expireTime;
-        $accessToken->session = $this->_em->getReference(Entity\Session::class, $sessionId);
+        $accessToken->session = $this->_em->getReference(Entity\SessionInterface::class, $sessionId);
 
         $this->_em->persist($accessToken);
         $this->_em->flush($accessToken);

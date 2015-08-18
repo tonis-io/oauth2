@@ -4,10 +4,17 @@ namespace Tonis\OAuth2\Entity;
 trait ScopeTrait
 {
     /**
-     * @param Scope $scope
+     * @var string
+     *
+     * @Id
+     * @Column(type="string")
      */
-    public function addScope(Scope $scope)
-    {
-        $this->scopes->add($scope);
-    }
+    protected $id;
+
+    /**
+     * @var string
+     *
+     * @Column(type="string")
+     */
+    protected $description;
 }
