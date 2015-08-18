@@ -14,7 +14,7 @@ trait RefreshTokenTrait
     /**
      * @var AccessTokenInterface
      *
-     * @ManyToOne(targetEntity="AccessTokenInterface", inversedBy="refreshTokens")
+     * @ManyToOne(targetEntity="Tonis\OAuth2\Entity\AccessTokenInterface", inversedBy="refreshTokens")
      * @JoinColumn(nullable=false, name="access_token", referencedColumnName="token")
      */
     protected $accessToken;

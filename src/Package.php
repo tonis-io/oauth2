@@ -13,10 +13,15 @@ final class Package implements PackageInterface
     /** @var array */
     private $config;
 
+    /**
+     * @param array $config
+     */
     public function __construct(array $config = [])
     {
         $defaults = [
-            'entity_path' => __DIR__ . '/Entity',
+            'entity_namespace' => __NAMESPACE__,
+            'entity_path'      => __DIR__ . '/Entity',
+
             'entities' => [
                 Entity\AccessTokenInterface::class    => Entity\AccessToken::class,
                 Entity\AuthCodeInterface::class       => Entity\AuthCode::class,
@@ -31,8 +36,7 @@ final class Package implements PackageInterface
     }
 
     /**
-     * @param App $app
-     * @return void
+     * {@inheritDoc}
      */
     public function register(App $app)
     {
@@ -47,6 +51,7 @@ final class Package implements PackageInterface
         $router->group('/oauth', function (Group $oauth) use ($container) {
             $oauth->get('/test', Action\Test::class);
             $oauth->post('/access_token', Action\AccessToken::class);
+            $oauth->get('/authorize', Action\Authorize::class);
         });
 
         $app->add($router);
@@ -79,6 +84,6 @@ final class Package implements PackageInterface
         $driver = $em->getConfiguration()->getMetadataDriverImpl();
 
         $oauth2driver = $em->getConfiguration()->newDefaultAnnotationDriver($this->config['entity_path']);
-        $driver->addDriver($oauth2driver, __NAMESPACE__);
+        $driver->addDriver($oauth2driver, $this->config['entity_namespace']);
     }
 }

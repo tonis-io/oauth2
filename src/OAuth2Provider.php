@@ -4,6 +4,7 @@ namespace Tonis\OAuth2;
 use Doctrine\ORM\EntityManager;
 use League\Container\ServiceProvider;
 use League\OAuth2\Server\AuthorizationServer;
+use League\OAuth2\Server\Grant\AuthCodeGrant;
 use League\OAuth2\Server\Grant\ClientCredentialsGrant;
 use League\OAuth2\Server\ResourceServer;
 
@@ -60,8 +61,8 @@ final class OAuth2Provider extends ServiceProvider
             $server->setClientStorage($container->get(Storage\Client::class));
             $server->setScopeStorage($container->get(Storage\Scope::class));
 
-            $clientCredentials = new ClientCredentialsGrant();
-            $server->addGrantType($clientCredentials);
+            $server->addGrantType(new ClientCredentialsGrant());
+            $server->addGrantType(new AuthCodeGrant());
 
             return $server;
         });

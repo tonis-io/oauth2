@@ -18,9 +18,9 @@ final class AccessToken extends EntityRepository
     public function create($token, $expireTime, $sessionId)
     {
         $accessToken = new Entity\AccessToken();
-        $accessToken->token = $token;
-        $accessToken->expireTime = $expireTime;
-        $accessToken->session = $this->_em->getReference(Entity\SessionInterface::class, $sessionId);
+        $accessToken->setToken($token);
+        $accessToken->setExpireTime($expireTime);
+        $accessToken->setSession($this->_em->getReference(Entity\SessionInterface::class, $sessionId));
 
         $this->_em->persist($accessToken);
         $this->_em->flush($accessToken);

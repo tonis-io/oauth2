@@ -39,8 +39,8 @@ final class AccessToken implements AccessTokenInterface
         }
 
         $token = new AccessTokenEntity($this->server);
-        $token->setId($result->token);
-        $token->setExpireTime($result->expireTime);
+        $token->setId($result->getToken());
+        $token->setExpireTime($result->getExpireTime());
 
         return $token;
     }
@@ -51,7 +51,7 @@ final class AccessToken implements AccessTokenInterface
     public function getScopes(AccessTokenEntity $token)
     {
         $accessToken = $this->tokenRepository->findOneWithScopesByToken($token);
-        $scopes      = $accessToken->scopes;
+        $scopes      = $accessToken->getScopes();
 
         $result = [];
         foreach ($scopes as $scope) {

@@ -19,7 +19,7 @@ trait ClientRedirectTrait
     /**
      * @var ClientInterface
      *
-     * @ManyToOne(targetEntity="ClientInterface", inversedBy="redirects")
+     * @ManyToOne(targetEntity="Tonis\OAuth2\Entity\ClientInterface", inversedBy="redirects")
      * @JoinColumn(nullable=false)
      */
     protected $client;

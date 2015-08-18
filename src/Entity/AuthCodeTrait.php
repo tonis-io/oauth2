@@ -18,7 +18,7 @@ trait AuthCodeTrait
     /**
      * @var SessionInterface
      *
-     * @ManyToOne(targetEntity="SessionInterface", inversedBy="authCodes")
+     * @ManyToOne(targetEntity="Tonis\OAuth2\Entity\SessionInterface", inversedBy="authCodes")
      * @JoinColumn(nullable=false)
      */
     protected $session;
@@ -40,7 +40,7 @@ trait AuthCodeTrait
     /**
      * @var ScopeInterface[]
      *
-     * @ManyToMany(targetEntity="ScopeInterface")
+     * @ManyToMany(targetEntity="Tonis\OAuth2\Entity\ScopeInterface")
      * @JoinTable(name="oauth_auth_code_scope",
      *   joinColumns={@JoinColumn(name="auth_code", referencedColumnName="code")},
      *   inverseJoinColumns={@JoinColumn(name="scope_id", referencedColumnName="id")}
