@@ -16,9 +16,10 @@ Tonis\OAuth2\Entity\OAuthClient:
       unique: true
       column: client_id
     clientSecret:
-      type:   string
-      length: 100
-      column: client_secret
+      type:     string
+      length:   100
+      column:   client_secret
+      nullable: true
     redirectUri:
       column:   redirect_uri
       type:     string
