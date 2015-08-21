@@ -22,11 +22,10 @@ class Util
      * @param TonisResponse $tonisResponse
      * @return TonisResponse
      */
-    public static function convertResponseToTonisJson(Response $response, TonisResponse $tonisResponse)
+    public static function convertResponseToTonis(Response $response, TonisResponse $tonisResponse)
     {
         return $tonisResponse
-            ->withStatus($response->getStatusCode())
-            ->json($response->getParameters());
+            ->withStatus($response->getStatusCode());
     }
 
     /**
@@ -37,6 +36,11 @@ class Util
      */
     public static function convertRequestFromPsr7(ServerRequestInterface $psrRequest)
     {
+        $headers = [];
+        foreach ($psrRequest->getHeaders() as $header => $value) {
+            $headers[$header] = implode(';', $value);
+        }
+
         return new Request(
             $psrRequest->getQueryParams(),
             is_array($psrRequest->getParsedBody()) ? $psrRequest->getParsedBody() : [],
@@ -44,7 +48,8 @@ class Util
             $psrRequest->getCookieParams(),
             self::getFiles($psrRequest->getUploadedFiles()),
             $psrRequest->getServerParams(),
-            $psrRequest->getBody()->__toString()
+            $psrRequest->getBody()->__toString(),
+            $headers
         );
     }
 
