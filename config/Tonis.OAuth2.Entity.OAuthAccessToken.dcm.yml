@@ -11,15 +11,15 @@ Tonis\OAuth2\Entity\OAuthAccessToken:
         strategy: AUTO
   fields:
     token:
-      type:       string
-      max_length: 40
-      unique:     true
+      type:   string
+      length: 40
+      unique: true
     expires:
-      type:       datetime
+      type: datetime
     scope:
-      type:       string
-      max_length: 50
-      nullable:   true
+      type:     string
+      length:   50
+      nullable: true
   manyToOne:
     client:
       targetEntity: Tonis\OAuth2\Entity\OAuthClientInterface

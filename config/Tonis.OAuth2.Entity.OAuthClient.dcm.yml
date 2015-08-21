@@ -11,16 +11,16 @@ Tonis\OAuth2\Entity\OAuthClient:
         strategy: AUTO
   fields:
     clientId:
-      name:       client_id
-      type:       string
-      max_length: 50
-      unique:     true
+      type:   string
+      length: 50
+      unique: true
+      column: client_id
     clientSecret:
-      name:       client_secret
-      type:       string
-      max_length: 20
+      type:   string
+      length: 100
+      column: client_secret
     redirectUri:
-      name:       redirect_uri
-      type:       string
-      max_length: 255
-      default:    ""
+      column:   redirect_uri
+      type:     string
+      length:   255
+      nullable: true
