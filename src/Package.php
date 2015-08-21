@@ -2,6 +2,7 @@
 namespace Tonis\OAuth2;
 
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Mapping\Driver\YamlDriver;
 use Doctrine\ORM\Tools\ResolveTargetEntityListener;
 use Tonis\App;
 use Tonis\PackageInterface;
@@ -23,14 +24,12 @@ final class Package implements PackageInterface
             'entity_path'      => __DIR__ . '/Entity',
 
             'entities' => [
-                Entity\AccessTokenInterface::class    => Entity\AccessToken::class,
-                Entity\AuthCodeInterface::class       => Entity\AuthCode::class,
-                Entity\ClientInterface::class         => Entity\Client::class,
-                Entity\ClientRedirectInterface::class => Entity\ClientRedirect::class,
-                Entity\RefreshTokenInterface::class   => Entity\RefreshToken::class,
-                Entity\ScopeInterface::class          => Entity\Scope::class,
-                Entity\SessionInterface::class        => Entity\Session::class,
-            ]
+                Entity\OAuthAccessTokenInterface::class => Entity\OAuthAccessToken::class,
+                Entity\OAuthClientInterface::class      => Entity\OAuthClient::class,
+                Entity\OAuthUserInterface::class        => Entity\OAuthUser::class,
+            ],
+
+            'register_user_entity' => true
         ];
         $this->config = array_replace_recursive($defaults, $config);
     }
@@ -50,7 +49,7 @@ final class Package implements PackageInterface
         $router = $app->router();
         $router->group('/oauth', function (Group $oauth) use ($container) {
             $oauth->get('/test', Action\Test::class);
-            $oauth->post('/access_token', Action\AccessToken::class);
+            $oauth->post('/token', Action\Token::class);
             $oauth->get('/authorize', Action\Authorize::class);
         });
 
@@ -83,7 +82,11 @@ final class Package implements PackageInterface
         /** @var \Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain $driver */
         $driver = $em->getConfiguration()->getMetadataDriverImpl();
 
-        $oauth2driver = $em->getConfiguration()->newDefaultAnnotationDriver($this->config['entity_path']);
-        $driver->addDriver($oauth2driver, $this->config['entity_namespace']);
+        $dirs = [__DIR__ . '/../config'];
+        if ($this->config['register_user_entity']) {
+            $dirs[] = __DIR__ . '/../config/user';
+        }
+
+        $driver->addDriver(new YamlDriver($dirs), $this->config['entity_namespace']);
     }
 }

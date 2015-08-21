@@ -1,0 +1,26 @@
+Tonis\OAuth2\Entity\OAuthClient:
+  type:             entity
+  table:            oauth_client
+  repositoryClass:  Tonis\OAuth2\Repository\OAuthClient
+  id:
+    id:
+      type: integer
+      options:
+        unsigned: true
+      generator:
+        strategy: AUTO
+  fields:
+    clientId:
+      name:       client_id
+      type:       string
+      max_length: 50
+      unique:     true
+    clientSecret:
+      name:       client_secret
+      type:       string
+      max_length: 20
+    redirectUri:
+      name:       redirect_uri
+      type:       string
+      max_length: 255
+      default:    ""
