@@ -35,7 +35,11 @@ class OAuthClient extends EntityRepository implements ClientCredentialsInterface
     {
         $client = $this->findOneBy(['clientId' => $clientId]);
         if ($client instanceof Entity\OAuthClient) {
-            return $client->getArrayCopy();
+            return [
+                'client_id'     => $client->getClientId(),
+                'client_secret' => $client->getClientSecret(),
+                'redirect_uri'  => $client->getRedirectUri(),
+            ];
         }
         return [];
     }

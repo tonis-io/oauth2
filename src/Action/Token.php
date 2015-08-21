@@ -28,30 +28,21 @@ final class Token implements Middleware\RouterInterface
      */
     public function __invoke(Request $request, Response $response)
     {
-        try {
-            $oauth2request  = new OAuth2Request(
-                $request->getQueryParams(),
-                is_array($request->getParsedBody()) ? $request->getParsedBody() : [],
-                $request->getAttributes(),
-                $request->getCookieParams(),
-                $this->getFiles($request->getUploadedFiles()),
-                $request->getServerParams(),
-                $request->getBody()->__toString()
-            );
-            $this->server->handleTokenRequest($oauth2request)->send();
-            exit;
-        } catch (\Exception $ex) {
-            $response = $response->withStatus(400);
+        $oauth2request = new OAuth2Request(
+            $request->getQueryParams(),
+            is_array($request->getParsedBody()) ? $request->getParsedBody() : [],
+            $request->getAttributes(),
+            $request->getCookieParams(),
+            $this->getFiles($request->getUploadedFiles()),
+            $request->getServerParams(),
+            $request->getBody()->__toString()
+        );
 
-            $result = [
-                'errors' => [
-                    'title'   => $ex->getMessage(),
-                    'details' => $ex->getTrace(),
-                ],
-            ];
-        }
+        $oauth2response = $this->server->handleTokenRequest($oauth2request);
 
-        return $response->json($result);
+        return $response
+            ->withStatus($oauth2response->getStatusCode())
+            ->json($oauth2response->getParameters());
     }
 
     private function getFiles(array $uploadedFiles)

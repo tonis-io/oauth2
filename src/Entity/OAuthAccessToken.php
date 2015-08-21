@@ -1,15 +1,15 @@
 <?php
 namespace Tonis\OAuth2\Entity;
 
+use DateTime;
+
 class OAuthAccessToken implements OAuthAccessTokenInterface
 {
-    use ExchangeArrayTrait;
-
     /** @var int */
     private $id;
     /** @var string */
     private $token;
-    /** @var \DateTime */
+    /** @var DateTime */
     private $expires;
     /** @var string */
     private $scope;
@@ -35,11 +35,27 @@ class OAuthAccessToken implements OAuthAccessTokenInterface
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public function setToken($token)
+    {
+        $this->token = $token;
+    }
+
+    /**
      * {@iheritDoc}
      */
     public function getExpires()
     {
         return $this->expires;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setExpires(DateTime $expires)
+    {
+        $this->expires = $expires;
     }
 
     /**
@@ -51,11 +67,27 @@ class OAuthAccessToken implements OAuthAccessTokenInterface
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public function setScope($scope)
+    {
+        $this->scope = $scope;
+    }
+
+    /**
      * {@iheritDoc}
      */
     public function getClient()
     {
         return $this->client;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setClient(OAuthClientInterface $client)
+    {
+        $this->client = $client;
     }
 
     /**
@@ -67,16 +99,10 @@ class OAuthAccessToken implements OAuthAccessTokenInterface
     }
 
     /**
-     * {@iheritDoc}
+     * {@inheritDoc}
      */
-    public function getArrayCopy()
+    public function setUser(OAuthUserInterface $user)
     {
-        return [
-            'token'     => $this->token,
-            'expires'   => $this->expires->getTimestamp(),
-            'scope'     => $this->scope,
-            'client_id' => $this->client->getClientId(),
-            'user_id'   => $this->user ? $this->user->getId() : null,
-        ];
+        $this->user = $user;
     }
 }

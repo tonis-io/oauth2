@@ -15,5 +15,10 @@ trait OAuthUserTrait
      */
     public function getUserDetails($username)
     {
+        [
+            'id'       => $this->id,
+            'email'    => $this->email,
+            'username' => $this->username,
+        ];
     }
 }

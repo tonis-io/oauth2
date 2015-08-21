@@ -3,8 +3,6 @@ namespace Tonis\OAuth2\Entity;
 
 class OAuthClient implements OAuthClientInterface
 {
-    use ExchangeArrayTrait;
-
     /** @var int */
     private $id;
     /** @var string */
@@ -44,17 +42,5 @@ class OAuthClient implements OAuthClientInterface
     public function getRedirectUri()
     {
         return $this->redirectUri;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getArrayCopy()
-    {
-        return [
-            'client_id'     => $this->clientId,
-            'client_secret' => $this->clientSecret,
-            'redirect_uri'  => $this->redirectUri,
-        ];
     }
 }
