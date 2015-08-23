@@ -3,29 +3,31 @@ namespace Tonis\OAuth2;
 
 use OAuth2\Request;
 use OAuth2\Response;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Tonis\Http\Response as TonisResponse;
 
 class Util
 {
     /**
-     * Disallow construction.
-     */
-    private function __construct()
-    {
-    }
-
-    /**
      * Takes an OAuth2 response and converts it to JSON output via Tonis\Http\Response.
      *
-     * @param Response      $response
-     * @param TonisResponse $tonisResponse
-     * @return TonisResponse
+     * @param Response          $oauthResponse
+     * @param ResponseInterface $psrResponse
+     * @return ResponseInterface
      */
-    public static function convertResponseToTonis(Response $response, TonisResponse $tonisResponse)
+    public static function convertResponseToPsr7(Response $oauthResponse, ResponseInterface $psrResponse)
     {
-        return $tonisResponse
-            ->withStatus($response->getStatusCode());
+        $psrResponse = $psrResponse
+            ->withHeader('Content-Type', 'application/json')
+            ->withStatus($oauthResponse->getStatusCode());
+
+        $psrResponse->getBody()->write(json_encode($oauthResponse->getParameters()));
+
+        foreach ($oauthResponse->getHttpHeaders() as $header => $value) {
+            $psrResponse = $psrResponse->withHeader($header, $value);
+        }
+
+        return $psrResponse;
     }
 
     /**
@@ -64,5 +66,12 @@ class Util
             $files[$key] = self::getFiles($value);
         }
         return $files;
+    }
+
+    /**
+     * Disallow construction.
+     */
+    private function __construct()
+    {
     }
 }

@@ -3,12 +3,12 @@ namespace Tonis\OAuth2\Action;
 
 use OAuth2\Request as OAuth2Request;
 use OAuth2\Server;
-use Tonis\Http\Request;
-use Tonis\Http\Response;
-use Tonis\Middleware;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Tonis\MiddlewareInterface;
 use Tonis\OAuth2\Util;
 
-final class Token implements Middleware\RouterInterface
+final class Token implements MiddlewareInterface
 {
     /** @var Server */
     private $server;
@@ -22,16 +22,12 @@ final class Token implements Middleware\RouterInterface
     }
 
     /**
-     * @param Request  $request
-     * @param Response $response
-     * @return Response
+     * {@inheritDoc}
      */
-    public function __invoke(Request $request, Response $response)
+    public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next)
     {
-        $oauth2request = Util::convertRequestFromPsr7($request);
-
-        return Util::convertResponseToTonisJson(
-            $this->server->handleTokenRequest($oauth2request),
+        return Util::convertResponseToPsr7(
+            $this->server->handleTokenRequest(Util::convertRequestFromPsr7($request)),
             $response
         );
     }
