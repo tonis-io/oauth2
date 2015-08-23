@@ -42,7 +42,7 @@ final class OAuthFactory
 
         // create the OAuth2 specific application that can be mounted at any path
         $app = new App($pimple);
-        $app->add(new OAuth2($app));
+        $app->post('/token', Action\Token::class);
 
         return $app;
     }
