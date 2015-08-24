@@ -21,7 +21,9 @@ class Util
             ->withHeader('Content-Type', 'application/json')
             ->withStatus($oauthResponse->getStatusCode());
 
-        $psrResponse->getBody()->write(json_encode($oauthResponse->getParameters()));
+        if (!empty($oauthResponse->getParameters())) {
+            $psrResponse->getBody()->write(json_encode($oauthResponse->getParameters()));
+        }
 
         foreach ($oauthResponse->getHttpHeaders() as $header => $value) {
             $psrResponse = $psrResponse->withHeader($header, $value);
