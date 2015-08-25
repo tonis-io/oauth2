@@ -5,10 +5,9 @@ use OAuth2\Request as OAuth2Request;
 use OAuth2\Server;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Tonis\MiddlewareInterface;
 use Tonis\OAuth2\Util;
 
-final class Token implements MiddlewareInterface
+final class Token
 {
     /** @var Server */
     private $server;

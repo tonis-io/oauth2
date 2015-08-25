@@ -8,14 +8,11 @@ use Doctrine\ORM\Tools\ResolveTargetEntityListener;
 use OAuth2\Server;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Tonis\App;
-use Tonis\Container\PimpleContainer;
-use Tonis\MiddlewareInterface;
 
-class OAuthMiddleware implements MiddlewareInterface
+class OAuthMiddleware
 {
-    /** @var App */
-    private $app;
+    /** @var Server */
+    private $server;
     /** @var array */
     private $config;
     /** @var EntityManager */
@@ -51,8 +48,12 @@ class OAuthMiddleware implements MiddlewareInterface
      */
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next)
     {
-        $app = $this->app();
-        $app->post('/token', Action\Token::class);
+        if ($request->getUri()->getPath() === '/token') {
+            $action = new Action\Token($this->getOAuthServer());
+            return $action($request, $response, $next);
+        }
+
+        return $next($request, $response);
     }
 
     /**
@@ -60,22 +61,15 @@ class OAuthMiddleware implements MiddlewareInterface
      */
     public function getOAuthServer()
     {
-        return $this->app()->getContainer()->get(Server::class);
-    }
-
-    /**
-     * @return App
-     */
-    private function app()
-    {
-        if ($this->app instanceof App) {
-            return $this->app;
+        if ($this->server) {
+            return $this->server;
         }
 
-        $pimple = new PimpleContainer();
-        $pimple->register(new ServiceProvider($this->entityManager));
-
-        return $this->app = new App($pimple);
+        return $this->server = new Server([
+            'access_token'       => $this->entityManager->getRepository(Entity\OAuthAccessTokenInterface::class),
+            'client_credentials' => $this->entityManager->getRepository(Entity\OAuthClientInterface::class),
+            'user_credentials'   => $this->entityManager->getRepository(Entity\OAuthUserInterface::class),
+        ]);
     }
 
     /**
