@@ -9,7 +9,7 @@
     "license": "BSD-3-Clause",
     "require": {
         "php": ">=5.5",
-        "league/oauth2-server": "^4.1",
+        "bshaffer/oauth2-server-php": "^1.7",
         "tonis-io/doctrine-orm": "^1.0@dev"
     },
     "require-dev": {
