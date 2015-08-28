@@ -9,7 +9,6 @@ use OAuth2\Server;
 use OAuth2\Storage;
 use PDO;
 use Tonis\OAuth2\Doctrine\FileLocator;
-use Tonis\OAuth2\Storage\DoctrineORM;
 
 class OAuthFactory
 {
