@@ -10,13 +10,11 @@
     "require": {
         "php": ">=5.5",
         "league/oauth2-server": "^4.1",
-        "ircmaxell/random-lib": "^1.1",
         "tonis-io/doctrine-orm": "^1.0@dev"
     },
     "require-dev": {
         "phpunit/phpunit": "^4.0",
         "squizlabs/php_codesniffer": "^2.0",
-        "tonis-io/tonis": "^1.0@dev",
         "mockery/mockery": "^0.9.4",
         "michaelmoussa/doctrine-qbmocker": "^0.9.0"
     },
