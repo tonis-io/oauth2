@@ -1,0 +1,30 @@
+Tonis\OAuth2\Entity\Client:
+  type: entity
+  table: oauth_client
+  id:
+    id:
+      type: string
+      length: 80
+      column: client_id
+  fields:
+    secret:
+      type: string
+      length: 80
+      column: client_secret
+    redirectUri:
+      type: string
+      length: 2000
+      column: redirect_uri
+      nullable: true
+    grantTypes:
+      type: string
+      length: 80
+      column: grant_types
+      nullable: true
+    scope:
+      type: string
+      length: 4000
+      nullable: true
+  manyToOne:
+    user:
+      targetEntity: Tonis\OAuth2\Entity\User

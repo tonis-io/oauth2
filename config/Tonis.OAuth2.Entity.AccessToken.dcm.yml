@@ -1,0 +1,23 @@
+Tonis\OAuth2\Entity\AccessToken:
+  type: entity
+  table: oauth_access_token
+  id:
+    token:
+      type: string
+      length: 40
+      column: access_token
+  fields:
+    expires:
+      type: datetime
+    scope:
+      type: string
+      length: 4000
+      nullable: true
+  manyToOne:
+      client:
+        targetEntity: Tonis\OAuth2\Entity\Client
+        joinColumn:
+          referencedColumnName: client_id
+          nullable: false
+      user:
+        targetEntity: Tonis\OAuth2\Entity\User

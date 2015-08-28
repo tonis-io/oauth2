@@ -17,16 +17,15 @@ class Util
      */
     public static function convertResponseToPsr7(Response $oauthResponse, ResponseInterface $psrResponse)
     {
-        $psrResponse = $psrResponse
-            ->withHeader('Content-Type', 'application/json')
-            ->withStatus($oauthResponse->getStatusCode());
-
-        if (!empty($oauthResponse->getParameters())) {
-            $psrResponse->getBody()->write(json_encode($oauthResponse->getParameters()));
-        }
+        $psrResponse = $psrResponse->withStatus($oauthResponse->getStatusCode());
 
         foreach ($oauthResponse->getHttpHeaders() as $header => $value) {
             $psrResponse = $psrResponse->withHeader($header, $value);
+        }
+
+        if (!empty($oauthResponse->getParameters())) {
+            $psrResponse = $psrResponse->withHeader('Content-Type', 'application/json');
+            $psrResponse->getBody()->write(json_encode($oauthResponse->getParameters()));
         }
 
         return $psrResponse;

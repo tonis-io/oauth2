@@ -1,0 +1,15 @@
+Tonis\OAuth2\Entity\Scope:
+  type: entity
+  table: oauth_scope
+  id:
+    id:
+      type: string
+      column: scope
+  fields:
+    isDefault:
+      type: boolean
+      column: is_default
+    description:
+      type: string
+      length: 4000
+      nullable: true

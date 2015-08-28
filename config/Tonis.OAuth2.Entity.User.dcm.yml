@@ -1,0 +1,34 @@
+Tonis\OAuth2\Entity\User:
+  type: entity
+  table: oauth_user
+  id:
+    id:
+      type: integer
+      generated:
+        strategy: AUTO
+      options:
+        unsigned: true
+  fields:
+    username:
+      type: string
+      length: 80
+    password:
+      type: string
+      length: 80
+    firstName:
+      type: string
+      length: 80
+      column: first_name
+    lastName:
+      type: string
+      length: 80
+      column: last_name
+    email:
+      type: string
+      length: 80
+    emailVerified:
+      type: boolean
+      column: email_verified
+    scope:
+      type: string
+      length: 4000

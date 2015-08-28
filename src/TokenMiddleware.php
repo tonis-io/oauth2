@@ -1,20 +1,20 @@
 <?php
 namespace Tonis\OAuth2;
 
-use League\OAuth2\Server\ResourceServer;
+use OAuth2\Server as OAuth2Server;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Zend\Diactoros\Response\JsonResponse;
 
 class TokenMiddleware
 {
-    /** @var ResourceServer */
+    /** @var OAuth2Server */
     private $server;
 
     /**
-     * @param ResourceServer $server
+     * @param OAuth2Server $server
      */
-    public function __construct(ResourceServer $server)
+    public function __construct(OAuth2Server $server)
     {
         $this->server = $server;
     }
@@ -25,10 +25,18 @@ class TokenMiddleware
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next)
     {
         try {
-            $this->server->isValidRequest(false);
-            $request = $request->withAttribute('access_token', $this->server->getAccessToken());
+            $oauth2request  = Util::convertRequestFromPsr7($request);
+            if ($this->server->verifyResourceRequest($oauth2request)) {
+                $request = $request->withAttribute('access_token', $this->server->getAccessTokenData($oauth2request));
+            }
         } catch (\Exception $ex) {
-            return new JsonResponse(['error' => $ex->getMessage()]);
+            return new JsonResponse(
+                [
+                    'error'             => $ex->getMessage(),
+                    'error_description' => $ex->getMessage(),
+                ],
+                500
+            );
         }
 
         return $next($request, $response);
