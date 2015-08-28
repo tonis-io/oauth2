@@ -1,0 +1,15 @@
+League\OAuth2\Server\Entity\ClientEntity:
+  type:             entity
+  table:            oauth_client
+  repositoryClass:  Tonis\OAuth2\Storage\Doctrine\ORM\Client
+  id:
+    id:
+      type: string
+  fields:
+    secret:
+      type: string
+    name:
+      type: string
+    redirectUri:
+      type: string
+      column: redirect_uri

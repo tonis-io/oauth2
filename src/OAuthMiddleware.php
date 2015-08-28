@@ -1,46 +1,28 @@
 <?php
 namespace Tonis\OAuth2;
 
-use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\Mapping\Driver\YamlDriver;
-use Doctrine\ORM\Tools\ResolveTargetEntityListener;
-use OAuth2\Server;
+use League\OAuth2\Server\AuthorizationServer;
+use League\OAuth2\Server\ResourceServer;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 class OAuthMiddleware
 {
-    /** @var Server */
-    private $server;
-    /** @var array */
-    private $config;
-    /** @var EntityManager */
-    private $entityManager;
+    /** @var AuthorizationServer */
+    private $authorizationServer;
+    /** @var ResourceServer */
+    private $resourceServer;
 
     /**
-     * @param EntityManager $entityManager
-     * @param array         $config
+     * @param AuthorizationServer $authorizationServer
+     * @param ResourceServer      $resourceServer
      */
-    public function __construct(EntityManager $entityManager, array $config)
-    {
-        $this->entityManager = $entityManager;
-
-        $defaults = [
-            'entity_namespace' => __NAMESPACE__,
-            'entity_path'      => __DIR__ . '/Entity',
-
-            'entities' => [
-                Entity\OAuthAccessTokenInterface::class => Entity\OAuthAccessToken::class,
-                Entity\OAuthClientInterface::class      => Entity\OAuthClient::class,
-                Entity\OAuthUserInterface::class        => null,
-            ],
-        ];
-
-        // config from sane defaults with overrides
-        $this->config = array_replace_recursive($defaults, $config);
-
-        $this->prepareEntityManager();
+    public function __construct(
+        AuthorizationServer $authorizationServer,
+        ResourceServer $resourceServer
+    ) {
+        $this->authorizationServer = $authorizationServer;
+        $this->resourceServer      = $resourceServer;
     }
 
     /**
@@ -48,49 +30,16 @@ class OAuthMiddleware
      */
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next)
     {
-        if ($request->getUri()->getPath() === '/token') {
-            $action = new Action\Token($this->getOAuthServer());
-            return $action($request, $response, $next);
-        }
+        if ($request->getUri()->getPath() === '/token' && $request->getMethod() == 'POST') {
+            return (new Action\Token($this->authorizationServer))->__invoke($request, $response, $next);
+        } elseif ($request->getUri()->getPath() == '/test' && $request->getMethod() == 'GET') {
+            // For testing we'll use the TokenMiddleware and then have it call the Test action.
+            // This will set the token attribute on the request automatically!
+            $token  = new TokenMiddleware($this->resourceServer);
+            $action = new Action\Test();
 
+            return $token->__invoke($request, $response, $action);
+        }
         return $next($request, $response);
-    }
-
-    /**
-     * @return Server
-     */
-    public function getOAuthServer()
-    {
-        if ($this->server) {
-            return $this->server;
-        }
-
-        return $this->server = new Server([
-            'access_token'       => $this->entityManager->getRepository(Entity\OAuthAccessTokenInterface::class),
-            'client_credentials' => $this->entityManager->getRepository(Entity\OAuthClientInterface::class),
-            'user_credentials'   => $this->entityManager->getRepository(Entity\OAuthUserInterface::class),
-        ]);
-    }
-
-    /**
-     * Prepare the EntityManager for OAuth entities and resolver.
-     */
-    protected function prepareEntityManager()
-    {
-        $resolver = new ResolveTargetEntityListener();
-
-        foreach ($this->config['entities'] as $originalEntity => $newEntity) {
-            $resolver->addResolveTargetEntity($originalEntity, $newEntity, []);
-        }
-
-        $this->entityManager->getEventManager()->addEventSubscriber($resolver);
-
-        $driver = $this->entityManager->getConfiguration()->getMetadataDriverImpl();
-
-        if (!$driver instanceof MappingDriverChain) {
-            throw new \LogicException('OAuth2 requires a driver chain on the Entity Manager');
-        }
-
-        $driver->addDriver(new YamlDriver([__DIR__ . '/../config']), $this->config['entity_namespace']);
     }
 }

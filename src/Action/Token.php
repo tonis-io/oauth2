@@ -1,21 +1,23 @@
 <?php
 namespace Tonis\OAuth2\Action;
 
-use OAuth2\Request as OAuth2Request;
-use OAuth2\Server;
+use Exception;
+use League\OAuth2\Server\AuthorizationServer;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Tonis\OAuth2\Util;
+use Zend\Diactoros\Response\JsonResponse;
 
 final class Token
 {
-    /** @var Server */
+    /**
+     * @var AuthorizationServer
+     */
     private $server;
 
     /**
-     * @param Server $server
+     * @param AuthorizationServer $server
      */
-    public function __construct(Server $server)
+    public function __construct(AuthorizationServer $server)
     {
         $this->server = $server;
     }
@@ -25,9 +27,12 @@ final class Token
      */
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next)
     {
-        return Util::convertResponseToPsr7(
-            $this->server->handleTokenRequest(Util::convertRequestFromPsr7($request)),
-            $response
-        );
+        try {
+            $data = $this->server->issueAccessToken();
+        } catch (Exception $ex) {
+            $data = ['error' => $ex->getMessage()];
+        }
+
+        return new JsonResponse($data);
     }
 }

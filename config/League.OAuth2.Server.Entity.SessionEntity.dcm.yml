@@ -1,0 +1,25 @@
+League\OAuth2\Server\Entity\SessionEntity:
+  type:             entity
+  table:            oauth_session
+  repositoryClass:  Tonis\OAuth2\Storage\Doctrine\ORM\Session
+  id:
+    id:
+      type: integer
+      generator:
+        strategy: AUTO
+      options:
+        unsigned: true
+  fields:
+    ownerId:
+      type: string
+      column: owner_id
+    ownerType:
+      type: string
+      column: owner_type
+  manyToOne:
+    client:
+      targetEntity: League\OAuth2\Server\Entity\ClientEntity
+      fetch: EAGER
+      joinColumn:
+        name: client_id
+        nullable: false

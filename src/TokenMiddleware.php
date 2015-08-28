@@ -1,28 +1,22 @@
 <?php
 namespace Tonis\OAuth2;
 
-use Doctrine\ORM\EntityRepository;
-use OAuth2\Server;
+use League\OAuth2\Server\ResourceServer;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Zend\Diactoros\Response\JsonResponse;
 
 class TokenMiddleware
 {
-    /** @var Repository\OAuthUser */
-    private $repository;
-    /** @var Server */
+    /** @var ResourceServer */
     private $server;
 
     /**
-     * @param EntityRepository $repository
-     * @param Server           $server
+     * @param ResourceServer $server
      */
-    public function __construct(
-        EntityRepository $repository,
-        Server $server
-    ) {
-        $this->repository = $repository;
-        $this->server     = $server;
+    public function __construct(ResourceServer $server)
+    {
+        $this->server = $server;
     }
 
     /**
@@ -30,16 +24,12 @@ class TokenMiddleware
      */
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next)
     {
-        $oauth2request = Util::convertRequestFromPsr7($request);
-
-        if (!$this->server->verifyResourceRequest($oauth2request)) {
-            return Util::convertResponseToPsr7($this->server->getResponse(), $response);
+        try {
+            $this->server->isValidRequest(false);
+            $request = $request->withAttribute('access_token', $this->server->getAccessToken());
+        } catch (\Exception $ex) {
+            return new JsonResponse(['error' => $ex->getMessage()]);
         }
-
-        $token   = $this->server->getAccessTokenData($oauth2request);
-        $request = $request
-            ->withAttribute('access_token', $token)
-            ->withAttribute('user', $this->repository->find($token['user_id']));
 
         return $next($request, $response);
     }

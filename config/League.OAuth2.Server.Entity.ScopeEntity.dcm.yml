@@ -1,0 +1,10 @@
+League\OAuth2\Server\Entity\ScopeEntity:
+  type:             entity
+  table:            oauth_scope
+  repositoryClass:  Tonis\OAuth2\Storage\Doctrine\ORM\Scope
+  id:
+    id:
+      type: string
+  fields:
+    description:
+      type: string

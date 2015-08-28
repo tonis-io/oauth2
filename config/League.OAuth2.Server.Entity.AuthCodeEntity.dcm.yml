@@ -1,0 +1,17 @@
+League\OAuth2\Server\Entity\AuthCodeEntity:
+  type:             entity
+  table:            oauth_auth_code
+  repositoryClass:  Tonis\OAuth2\Storage\Doctrine\ORM\AuthCode
+  id:
+    id:
+      type: string
+  fields:
+    redirectUri:
+      type: string
+      column: redirect_uri
+    expireTime:
+      type: datetime
+      column: expire_time
+  manyToOne:
+      session:
+        targetEntity: League\OAuth2\Server\Entity\SessionEntity
