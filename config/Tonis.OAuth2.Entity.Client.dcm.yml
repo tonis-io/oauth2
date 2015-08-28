@@ -1,6 +1,7 @@
 Tonis\OAuth2\Entity\Client:
   type: entity
   table: oauth_client
+  repositoryClass: Tonis\OAuth2\Doctrine\Repository\Client
   id:
     id:
       type: string

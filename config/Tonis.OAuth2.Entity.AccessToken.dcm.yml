@@ -1,6 +1,7 @@
 Tonis\OAuth2\Entity\AccessToken:
   type: entity
   table: oauth_access_token
+  repositoryClass: Tonis\OAuth2\Doctrine\Repository\AccessToken
   id:
     token:
       type: string

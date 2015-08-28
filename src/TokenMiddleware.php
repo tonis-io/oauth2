@@ -26,9 +26,10 @@ class TokenMiddleware
     {
         try {
             $oauth2request  = Util::convertRequestFromPsr7($request);
-            if ($this->server->verifyResourceRequest($oauth2request)) {
-                $request = $request->withAttribute('access_token', $this->server->getAccessTokenData($oauth2request));
+            if (!$this->server->verifyResourceRequest($oauth2request)) {
+                return Util::convertResponseToPsr7($this->server->getResponse(), $response);
             }
+            $request = $request->withAttribute('access_token', $this->server->getAccessTokenData($oauth2request));
         } catch (\Exception $ex) {
             return new JsonResponse(
                 [

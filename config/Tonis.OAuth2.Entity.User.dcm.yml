@@ -1,6 +1,7 @@
 Tonis\OAuth2\Entity\User:
   type: entity
   table: oauth_user
+  repositoryClass: Tonis\OAuth2\Doctrine\Repository\User
   id:
     id:
       type: integer

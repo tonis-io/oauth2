@@ -1,6 +1,7 @@
 Tonis\OAuth2\Entity\Scope:
   type: entity
   table: oauth_scope
+  repositoryClass: Tonis\OAuth2\Doctrine\Repository\Scope
   id:
     id:
       type: string

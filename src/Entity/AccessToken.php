@@ -3,9 +3,9 @@ namespace Tonis\OAuth2\Entity;
 
 class AccessToken
 {
-    private $token;
-    private $client;
-    private $user;
-    private $expires;
-    private $scope;
+    public $token;
+    public $client;
+    public $user;
+    public $expires;
+    public $scope;
 }

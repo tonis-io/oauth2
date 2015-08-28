@@ -3,10 +3,10 @@ namespace Tonis\OAuth2\Entity;
 
 class Client
 {
-    private $id;
-    private $secret;
-    private $redirectUri;
-    private $grantTypes;
-    private $scope;
-    private $user;
+    public $id;
+    public $secret;
+    public $redirectUri;
+    public $grantTypes;
+    public $scope;
+    public $user;
 }
