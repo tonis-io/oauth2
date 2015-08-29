@@ -59,6 +59,19 @@ class OAuthFactory
     }
 
     /**
+     * Prepares an EntityManager by adding the Doctrine driver and Entity Resolver. Assumes that any custom
+     * entities are also exclusions for the entity resolver.
+     *
+     * @param EntityManager $entityManager
+     * @param array         $entities
+     */
+    public static function prepareEntityManager(EntityManager $entityManager, array $entities)
+    {
+        self::addDoctrineDriver($entityManager, $entities);
+        self::addDoctrineEntityResolver($entityManager, $entities);
+    }
+
+    /**
      * Adds the default Tonis\OAuth2 driver to the input entity manager. Drivers can be
      * setup manually if the consumer wishes to overwrite anything.
      *
