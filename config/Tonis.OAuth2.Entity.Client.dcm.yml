@@ -1,4 +1,4 @@
-Tonis\OAuth2\Entity\Client:
+Tonis\OAuth2\Doctrine\Entity\Client:
   type: entity
   table: oauth_client
   repositoryClass: Tonis\OAuth2\Doctrine\Repository\Client
@@ -28,4 +28,4 @@ Tonis\OAuth2\Entity\Client:
       nullable: true
   manyToOne:
     user:
-      targetEntity: Tonis\OAuth2\Entity\User
+      targetEntity: Tonis\OAuth2\Doctrine\Entity\User

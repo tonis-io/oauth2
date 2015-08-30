@@ -1,4 +1,4 @@
-Tonis\OAuth2\Entity\User:
+Tonis\OAuth2\Doctrine\Entity\User:
   type: entity
   table: oauth_user
   repositoryClass: Tonis\OAuth2\Doctrine\Repository\User

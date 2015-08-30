@@ -1,4 +1,4 @@
-Tonis\OAuth2\Entity\AccessToken:
+Tonis\OAuth2\Doctrine\Entity\AccessToken:
   type: entity
   table: oauth_access_token
   repositoryClass: Tonis\OAuth2\Doctrine\Repository\AccessToken
@@ -16,9 +16,9 @@ Tonis\OAuth2\Entity\AccessToken:
       nullable: true
   manyToOne:
       client:
-        targetEntity: Tonis\OAuth2\Entity\Client
+        targetEntity: Tonis\OAuth2\Doctrine\Entity\Client
         joinColumn:
           referencedColumnName: client_id
           nullable: false
       user:
-        targetEntity: Tonis\OAuth2\Entity\User
+        targetEntity: Tonis\OAuth2\Doctrine\Entity\User

@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping\ClassMetadata;
 use League\OAuth2\Server\Entity\AccessTokenEntity;
 use MMoussa\Doctrine\Test\ORM\QueryBuilderMocker;
 use Mockery as m;
-use Tonis\OAuth2\Entity;
+use Tonis\OAuth2\Doctrine\Entity;
 
 /**
  * @covers \Tonis\OAuth2\Repository\AccessToken

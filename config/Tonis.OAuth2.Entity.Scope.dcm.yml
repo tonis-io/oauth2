@@ -1,4 +1,4 @@
-Tonis\OAuth2\Entity\Scope:
+Tonis\OAuth2\Doctrine\Entity\Scope:
   type: entity
   table: oauth_scope
   repositoryClass: Tonis\OAuth2\Doctrine\Repository\Scope
