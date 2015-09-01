@@ -9,8 +9,7 @@
     "license": "BSD-3-Clause",
     "require": {
         "php": ">=5.5",
-        "bshaffer/oauth2-server-php": "^1.7",
-        "tonis-io/doctrine-orm": "^1.0@dev"
+        "bshaffer/oauth2-server-php": "^1.7"
     },
     "require-dev": {
         "phpunit/phpunit": "^4.0",
